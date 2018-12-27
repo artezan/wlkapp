@@ -1,0 +1,19 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons> <ion-menu-button></ion-menu-button> </ion-buttons>
+    <ion-title>products</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content padding>
+  <ion-grid fixed>
+    <ng-container *ngIf="isLoad; else elseTemplate">
+      <ion-list>
+        <ion-item *ngFor="let cat of categories" (click)="getChild(cat.subcategories)" detail>
+          <ion-label> {{ cat.displayName }} </ion-label>
+        </ion-item>
+      </ion-list>
+    </ng-container>
+    <ng-template #elseTemplate> </ng-template>
+  </ion-grid>
+</ion-content>
