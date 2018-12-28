@@ -65,7 +65,6 @@ export class Tab1Component implements OnInit {
   getAllProducts() {
     this.ticketService.getAll().then(data => {
       this.tickets = data;
-
       const p = data.map(ticket => ticket.products);
       const merged: IProduct[] = [].concat(...p);
       console.log(merged);
