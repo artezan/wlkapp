@@ -1,0 +1,110 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button></ion-back-button>
+    </ion-buttons>
+    <ion-title>Detalles de Ticket</ion-title>
+  </ion-toolbar>
+</ion-header>
+<ion-content padding>
+  <ion-grid fixed>
+    <ng-container *ngIf="isLoad; else elseTemplate">
+      <ion-list>
+        <ion-item>
+          <h4>Precio ${{ ticket.realPrice }}</h4>
+        </ion-item>
+        <ion-item>
+          <h4>Fecha {{ formatDates(ticket.date) }}</h4>
+        </ion-item>
+        <ion-item>
+          <h4>Descuento: ${{ ticket.discount }}</h4>
+        </ion-item>
+        <ion-item>
+          <h4># Productos: {{ ticket.products.length }}</h4>
+        </ion-item>
+      </ion-list>
+      <ion-card>
+        <!-- Filtros -->
+        <ion-list-header> Filtros y Ordenar
+        </ion-list-header>
+        <ion-list>
+          <ion-item>
+            <ion-label>Ordenar</ion-label>
+            <ion-select [(ngModel)]="sortByPrice"
+                        name="sbp"
+                        (ionChange)="generalFilter()"
+                        placeholder="Selecciona">
+              <ion-select-option value="1">Mayor Precio</ion-select-option>
+              <ion-select-option value="2">Menor Precio</ion-select-option>
+              <ion-select-option value="3">Mayor Cantidad</ion-select-option>
+              <ion-select-option value="4">Menor Cantidad</ion-select-option>
+              <ion-select-option value="5">Mayor $unidad</ion-select-option>
+              <ion-select-option value="6">Menor $unidad</ion-select-option>
+            </ion-select>
+          </ion-item>
+          <ion-item>
+            <ion-label>Filtros</ion-label>
+            <ion-select [(ngModel)]="filtersInput"
+                        (ionChange)="generalFilter()"
+                        placeholder="Selecciona"
+                        multiple="true">
+              <ion-select-option *ngFor="let department of departments"
+                                 [value]="department">{{
+                department }}</ion-select-option>
+            </ion-select>
+          </ion-item>
+          <ion-item>
+            <ion-label position="floating">Buscar</ion-label>
+            <ion-input (ionChange)="generalFilter()"
+                       [(ngModel)]="inputSearch"
+                       id="maxInp"
+                       name="maxInp"
+                       #maxInp="ngModel"
+                       clearInput></ion-input>
+          </ion-item>
+        </ion-list>
+        <ion-item lines="none">
+          <ion-button slot="end"
+                      (click)="
+              filtersInput = undefined;
+              sortByPrice = undefined;
+              inputSearch = undefined;
+              generalFilter()
+            "
+                      color="secondary">Limpiar</ion-button>
+        </ion-item>
+      </ion-card>
+      <ion-row>
+        <ion-col size="6"
+                 *ngFor="let product of products">
+          <ion-card>
+            <ion-img [src]="product.imgURL"
+                     *ngIf="product.imgURL !== null"></ion-img>
+            <ion-card-header>
+              <ion-card-subtitle>{{ product.skuId }}</ion-card-subtitle>
+            </ion-card-header>
+            <ion-card-content>
+              <p>{{ product.skuDisplayNameText }}</p>
+            </ion-card-content>
+            <ion-item>
+              <ion-label text-wrap>Precio: ${{
+                product.importPrice }}
+              </ion-label>
+            </ion-item>
+            <ion-item>
+              <ion-label text-wrap>Cantidad: {{
+                product.quantity }} {{ product.unity }}
+              </ion-label>
+            </ion-item>
+            <ion-item>
+              <ion-label text-wrap>P. Unidad: ${{
+                product.valueUnited }}
+              </ion-label>
+            </ion-item>
+          </ion-card>
+        </ion-col>
+      </ion-row>
+    </ng-container>
+    <ng-template #elseTemplate> cargando ... </ng-template>
+  </ion-grid>
+</ion-content>

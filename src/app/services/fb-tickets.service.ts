@@ -3,6 +3,9 @@ import * as firebase from 'firebase/app';
 import 'firebase/firestore';
 import { FB_CONFIG } from '../_config/fb-config';
 import { ITicket } from '../models/ticket.model';
+import { HttpClient } from '@angular/common/http';
+import { URL_XML_JSON } from '../_config/funtion.xmlToJson';
+import { Observable } from 'rxjs/internal/Observable';
 
 firebase.initializeApp(FB_CONFIG);
 // Inica firestore
@@ -11,13 +14,14 @@ const firestore = firebase.firestore();
 const settings = { timestampsInSnapshots: true };
 firestore.settings(settings);
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class FbTicketsService {
   collectionRef = firestore.collection('tickets');
-  constructor() {}
+  constructor(private http: HttpClient) {}
   public saveTicket(ticket: ITicket): Promise<boolean> {
     return new Promise(resolve => {
+      console.log(ticket);
       this.collectionRef
         .add(ticket)
         .then(() => {
@@ -66,7 +70,7 @@ export class FbTicketsService {
         });
     });
   }
-  public getAll() {
+  public getAll(): Promise<ITicket[]> {
     return new Promise(resolve => {
       this.collectionRef.onSnapshot(docs => {
         const data = [];
@@ -76,5 +80,8 @@ export class FbTicketsService {
         resolve(data);
       });
     });
+  }
+  public xmlToJson(xml: string): Observable<any> {
+    return this.http.post(URL_XML_JSON, { xml });
   }
 }

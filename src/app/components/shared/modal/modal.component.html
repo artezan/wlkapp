@@ -1,0 +1,31 @@
+<ion-header translucent>
+  <ion-toolbar>
+    <ion-title>Super Modal</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="modalController.dismiss()">
+        <ion-icon slot="icon-only"
+                  name="close"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+<ion-content>
+  <h2>{{ title }}</h2>
+  <h4>{{ subTitle }}</h4>
+  <span *ngIf="isSearch">
+    <ion-searchbar showCancelButton="true"
+                   (ionChange)="searhcItem($event.detail.value)"
+                   (ionClear)="searhcItem(null)"
+                   placeholder="Buscar..."></ion-searchbar>
+  </span>
+  <span *ngIf="type === 'list'">
+    <ion-list>
+      <ion-item *ngFor="let item of items"
+                (click)="dismiss(item.skuId)">
+        {{ item.skuDisplayNameText }}
+      </ion-item>
+    </ion-list>
+  </span>
+  <ion-button color="secondary"
+              (click)="modalController.dismiss()">Regresar</ion-button>
+</ion-content>

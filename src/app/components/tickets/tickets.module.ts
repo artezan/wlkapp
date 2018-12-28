@@ -6,13 +6,19 @@ import { Routes, RouterModule } from '@angular/router';
 import { IonicModule } from '@ionic/angular';
 
 import { TicketsPage } from './tickets.page';
-import { TicketsNewEditComponent } from './tickets-new-edit/tickets-new-edit.component';
+
+import { TicketsDetailComponent } from './tickets-detail/tickets-detail.component';
+import { SharedModule } from '../shared/shared.module';
 
 const routes: Routes = [
   {
     path: '',
-    component: TicketsPage
-  }
+    component: TicketsPage,
+  },
+  {
+    path: 'details',
+    component: TicketsDetailComponent,
+  },
 ];
 
 @NgModule({
@@ -20,8 +26,9 @@ const routes: Routes = [
     CommonModule,
     FormsModule,
     IonicModule,
-    RouterModule.forChild(routes)
+    SharedModule,
+    RouterModule.forChild(routes),
   ],
-  declarations: [TicketsPage, TicketsNewEditComponent]
+  declarations: [TicketsPage, TicketsDetailComponent],
 })
 export class TicketsPageModule {}

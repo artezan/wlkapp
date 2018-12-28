@@ -7,20 +7,20 @@ import { ISubcategory } from 'src/app/models/subCategory.model';
 @Component({
   selector: 'app-products',
   templateUrl: './products.page.html',
-  styleUrls: ['./products.page.scss']
+  styleUrls: ['./products.page.scss'],
 })
 export class ProductsPage implements OnInit {
   categories: Category[];
   isLoad: boolean;
   constructor(
     private ticketService: FbTicketsService,
-    private walmartService: WalmartService
+    private walmartService: WalmartService,
   ) {}
 
   ngOnInit() {
-    this.ticketService.getAll().then(data => console.log('all', data));
+    /*   this.ticketService.getAll().then(data => console.log('all', data));
 
-    this.getCategories();
+    this.getCategories(); */
   }
   getCategories() {
     this.isLoad = false;

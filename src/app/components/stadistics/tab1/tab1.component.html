@@ -1,0 +1,30 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-menu-button></ion-menu-button>
+    </ion-buttons>
+    <ion-title>Productos Gráficas</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content padding>
+  <ion-grid fixed>
+    <button (click)="presentModal()">Modal</button>
+    <ng-container *ngIf="showChart; else elseTemplate">
+      <div *ngFor="let chart of charts; let i = index">
+        <h4>{{ chart.title }}</h4>
+        <ion-card>
+          <ion-item lines="none">
+            <ion-button (click)="setChart(i)">Selecciona
+              Producto</ion-button>
+          </ion-item>
+          <app-general-chart [lineChartData]="chart.lineChartData"
+                             [lineChartLabels]="chart.lineChartLabels"
+                             [showChart]="chart.showChart"
+                             lineChartType="line"></app-general-chart>
+        </ion-card>
+      </div>
+    </ng-container>
+    <ng-template #elseTemplate> cargando ... </ng-template>
+  </ion-grid>
+</ion-content>

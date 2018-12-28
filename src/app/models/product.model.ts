@@ -1,15 +1,6 @@
 export interface IProduct {
   longDescription: string;
   skuDisplayNameText: string;
-  codeMessage: string;
-  jsessionid: string;
-  maxQuantity: number;
-  skuType: string;
-  savingsAmount: number;
-  seoURL: string;
-  serverConfiguration: string;
-  breadcrumb: Breadcrumb;
-  configurableSku: string;
   sku: Sku;
   specialPrice: string;
   department: string;
@@ -17,6 +8,36 @@ export interface IProduct {
   skuId: string;
   status: string;
   basePrice: string;
+  /**
+   * -1 error
+   */
+  codeMessage?: string;
+  // ticket
+  imgURL?: string;
+  /**
+   * Importe
+   */
+  importPrice?: string;
+  /**
+   * Cantidad
+   */
+  quantity?: string;
+  /**
+   * ClaveUnidad
+   */
+  keyUnity?: string;
+  /**
+   * Descripcion
+   */
+  description?: string;
+  /**
+   * Unidad
+   */
+  unity?: string;
+  /**
+   * ValorUnitario
+   */
+  valueUnited?: string;
 }
 
 interface Sku {
