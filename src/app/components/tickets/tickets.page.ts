@@ -9,7 +9,7 @@ import { Router, NavigationExtras } from '@angular/router';
 @Component({
   selector: 'app-tickets',
   templateUrl: './tickets.page.html',
-  styleUrls: ['./tickets.page.scss'],
+  styleUrls: ['./tickets.page.scss']
 })
 export class TicketsPage implements OnInit {
   ticketInput: ITicket;
@@ -20,7 +20,7 @@ export class TicketsPage implements OnInit {
     public ticketService: FbTicketsService,
     private walmartService: WalmartService,
     public loadingController: LoadingController,
-    private router: Router,
+    private router: Router
   ) {}
 
   ngOnInit() {
@@ -69,7 +69,7 @@ export class TicketsPage implements OnInit {
       prePrice: firstElement.attributes.SubTotal,
       discount: firstElement.attributes.Descuento
         ? firstElement.attributes.Descuento
-        : 0,
+        : 0
     };
     this.ticketInput.products = await this.getProducts(productsOnXml);
     this.addTicketToFB();
@@ -84,6 +84,8 @@ export class TicketsPage implements OnInit {
           .getSKU(p.NoIdentificacion, p.NoIdentificacion, this.storeId)
           .toPromise();
         if (data.codeMessage === '-1') {
+          console.log(p);
+
           product.push({
             longDescription: p.Descripcion,
             skuDisplayNameText: p.Descripcion,
@@ -100,7 +102,7 @@ export class TicketsPage implements OnInit {
             keyUnity: p.ClaveUnidad,
             description: p.Descripcion,
             unity: p.Unidad,
-            valueUnited: p.ValorUnitario,
+            valueUnited: p.ValorUnitario
           });
         } else {
           product.push({
@@ -121,15 +123,26 @@ export class TicketsPage implements OnInit {
             keyUnity: p.ClaveUnidad,
             description: p.Descripcion,
             unity: p.Unidad,
-            valueUnited: p.ValorUnitario,
+            valueUnited: p.ValorUnitario
           });
         }
       }
+      const finalProducts = product.map(r => {
+        let res: IProduct = {};
+        res = r;
+        Object.keys(r).forEach(key => {
+          if (r[key] === undefined) {
+            res[key] = null;
+          }
+        });
+        return finalProducts;
+      });
 
       resolve(product);
     });
     const result = await promise;
     loading.dismiss();
+
     return result;
   }
   addTicketToFB() {
@@ -144,7 +157,7 @@ export class TicketsPage implements OnInit {
   }
   async presentLoading() {
     const loading = await this.loadingController.create({
-      message: 'Subiendo...',
+      message: 'Subiendo...'
     });
     return await loading;
   }

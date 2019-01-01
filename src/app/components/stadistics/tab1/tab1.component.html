@@ -9,7 +9,7 @@
 
 <ion-content padding>
   <ion-grid fixed>
-    <button (click)="presentModal()">Modal</button>
+    <!-- <button (click)="getSumBySku('importPrice','00020151600000')">Modal</button> -->
     <ng-container *ngIf="showChart; else elseTemplate">
       <div *ngFor="let chart of charts; let i = index">
         <h4>{{ chart.title }}</h4>
@@ -17,6 +17,9 @@
           <ion-item lines="none">
             <ion-button (click)="setChart(i)">Selecciona
               Producto</ion-button>
+          </ion-item>
+          <ion-item lines="none">
+            <p>{{chart.subTitle}}</p>
           </ion-item>
           <app-general-chart [lineChartData]="chart.lineChartData"
                              [lineChartLabels]="chart.lineChartLabels"

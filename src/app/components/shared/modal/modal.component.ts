@@ -3,14 +3,14 @@ import {
   OnInit,
   Input,
   OnChanges,
-  SimpleChanges,
+  SimpleChanges
 } from '@angular/core';
 import { NavParams, ModalController } from '@ionic/angular';
 
 @Component({
   selector: 'app-modal',
   templateUrl: './modal.component.html',
-  styleUrls: ['./modal.component.scss'],
+  styleUrls: ['./modal.component.scss']
 })
 export class ModalComponent implements OnInit, OnChanges {
   @Input() type: 'list';
@@ -34,7 +34,6 @@ export class ModalComponent implements OnInit, OnChanges {
     }
   }
   searhcItem(str: string) {
-    console.log(str);
     this.items = this.realData;
     this.items = this.items.filter(p => {
       const index = JSON.stringify(p)
@@ -46,9 +45,9 @@ export class ModalComponent implements OnInit, OnChanges {
       }
     });
   }
-  dismiss(value) {
+  dismiss(item) {
     this.modalController.dismiss({
-      result: value,
+      result: item
     });
   }
 }

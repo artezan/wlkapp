@@ -21,7 +21,7 @@
   <span *ngIf="type === 'list'">
     <ion-list>
       <ion-item *ngFor="let item of items"
-                (click)="dismiss(item.skuId)">
+                (click)="dismiss(item)">
         {{ item.skuDisplayNameText }}
       </ion-item>
     </ion-list>

@@ -8,7 +8,7 @@ import { IProduct } from 'src/app/models/product.model';
 @Component({
   selector: 'app-tickets-detail',
   templateUrl: './tickets-detail.component.html',
-  styleUrls: ['./tickets-detail.component.scss'],
+  styleUrls: ['./tickets-detail.component.scss']
 })
 export class TicketsDetailComponent implements OnInit {
   ticket: ITicket;
@@ -21,7 +21,7 @@ export class TicketsDetailComponent implements OnInit {
   departments: string[] = [];
   constructor(
     private route: ActivatedRoute,
-    private ticketService: FbTicketsService,
+    private ticketService: FbTicketsService
   ) {
     this.route.queryParams.subscribe(params => {
       if (params.id) {
@@ -62,9 +62,10 @@ export class TicketsDetailComponent implements OnInit {
         prePrice: data
           .map(ticket => +ticket.prePrice)
           .reduce(getSum)
-          .toString(),
+          .toString()
       };
       this.getEqualsSku(this.ticket);
+      this.departments = this.getDepartment(this.ticket);
       this.isLoad = true;
     });
   }
@@ -112,7 +113,7 @@ export class TicketsDetailComponent implements OnInit {
     if (this.filtersInput) {
       console.log(this.filtersInput);
       this.products = this.products.filter(p =>
-        this.filtersInput.some(f => f === p.department),
+        this.filtersInput.some(f => f === p.department)
       );
     }
   }

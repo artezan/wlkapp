@@ -1,13 +1,13 @@
 export interface IProduct {
-  longDescription: string;
-  skuDisplayNameText: string;
-  sku: Sku;
-  specialPrice: string;
-  department: string;
-  isPriceStrike: boolean;
-  skuId: string;
-  status: string;
-  basePrice: string;
+  longDescription?: string;
+  skuDisplayNameText?: string;
+  sku?: Sku;
+  specialPrice?: string;
+  department?: string;
+  isPriceStrike?: boolean;
+  skuId?: string;
+  status?: string;
+  basePrice?: string;
   /**
    * -1 error
    */

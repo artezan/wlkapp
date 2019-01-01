@@ -5,5 +5,6 @@ export interface IChart {
   }[];
   lineChartLabels: string[];
   title: string;
+  subTitle?: string;
   showChart: boolean;
 }

@@ -9,7 +9,7 @@ import { ITicket } from 'src/app/models/ticket.model';
 @Component({
   selector: 'app-tab1',
   templateUrl: './tab1.component.html',
-  styleUrls: ['./tab1.component.scss'],
+  styleUrls: ['./tab1.component.scss']
 })
 export class Tab1Component implements OnInit {
   showChart = false;
@@ -28,49 +28,98 @@ export class Tab1Component implements OnInit {
     'Septiembre',
     'Octubre',
     'Noviembre',
-    'Diciembre',
+    'Diciembre'
   ];
   constructor(
     public ticketService: FbTicketsService,
-    public modalController: ModalController,
+    public modalController: ModalController
   ) {}
 
   ngOnInit() {
-    this.setValuesChart(
+    /*    this.setValuesChart(
       ['enero', 'feb', 'marz'],
       [10, 20, 30],
       'Importe',
-      'Precio $',
+      'Precio $'
     );
     this.setValuesChart(
       ['enero', 'feb', 'marz'],
       [10, 20, 30],
       'Cantidad',
-      'Precio $',
+      'Precio $'
     );
     this.setValuesChart(
       ['enero', 'feb', 'marz'],
       [10, 20, 30],
       'Costo Unitario',
-      'Precio $',
+      'Precio $'
     );
     this.setValuesChart(
       ['enero', 'feb', 'marz'],
       [10, 20, 30],
       'Importe - Ticket',
-      'Precio $',
-    );
+      'Precio $'
+    ); */
     this.getAllProducts();
   }
-  getAllProducts() {
+  async getAllProducts() {
+    this.tickets = await this.ticketService.getAll();
     this.ticketService.getAll().then(data => {
-      this.tickets = data;
       const p = data.map(ticket => ticket.products);
       const merged: IProduct[] = [].concat(...p);
-      console.log(merged);
-      console.log(data);
-      this.getEqualsSku(merged);
+      this.products = this.getEqualsSku(merged);
+      this.setFirstCharts();
     });
+  }
+  setFirstCharts() {
+    const { monthsName, months } = this.getTimeByTickets(this.tickets);
+    // importe
+    const productOfImport = this.sortsByProp('importPrice')[0];
+    const skuIdOfMayor = productOfImport.skuId;
+    const dataY = this.getProductByTime(
+      months,
+      skuIdOfMayor,
+      this.tickets,
+      'importPrice'
+    );
+    this.setValuesChart(
+      monthsName,
+      dataY,
+      'Importe',
+      'Precio $',
+      productOfImport.skuDisplayNameText
+    );
+    // cantidad
+    const productOfQuantity = this.sortsByProp('quantity')[0];
+    const dataY2 = this.getProductByTime(
+      months,
+      productOfQuantity.skuId,
+      this.tickets,
+      'quantity'
+    );
+    this.setValuesChart(
+      monthsName,
+      dataY2,
+      'Cantidad',
+      productOfQuantity.unity,
+      productOfQuantity.skuDisplayNameText
+    );
+    // Costo Unitario
+    const productOfCost = this.sortsByProp('valueUnited')[0];
+    const dataY3 = this.getAvrByTime(
+      months,
+      productOfCost.skuId,
+      this.tickets,
+      'valueUnited'
+    );
+    this.setValuesChart(
+      monthsName,
+      dataY3,
+      'Costo Unitario',
+      'Precio $',
+      productOfCost.skuDisplayNameText
+    );
+    // Importe - Ticket
   }
   getEqualsSku(products: IProduct[]) {
     const sumary: IProduct[] = [];
@@ -87,14 +136,14 @@ export class Tab1Component implements OnInit {
         ).toFixed(2);
       }
     });
-    this.products = sumary;
+    return sumary;
   }
   async presentModal(items: any[], title, subTitle) {
     const modal = await this.modalController.create({
       component: ModalComponent,
       componentProps: { type: 'list', items, title, isSearch: true, subTitle },
       backdropDismiss: true,
-      showBackdrop: true,
+      showBackdrop: true
     });
 
     return await modal;
@@ -102,6 +151,12 @@ export class Tab1Component implements OnInit {
   setChart(num) {
     if (num === 0) {
       this.chart1();
+    }
+    if (num === 1) {
+      this.chart2();
+    }
+    if (num === 2) {
+      this.chart3();
     }
   }
   private async chart1() {
@@ -115,11 +170,68 @@ export class Tab1Component implements OnInit {
       const { monthsName, months } = this.getTimeByTickets(this.tickets);
       const dataY = this.getProductByTime(
         months,
-        data.result,
+        data.result.skuId,
         this.tickets,
-        'importPrice',
+        'importPrice'
       );
-      this.setValuesChart(monthsName, dataY, 'Importe', 'Precio $', 0);
+      this.setValuesChart(
+        monthsName,
+        dataY,
+        'Importe',
+        'Precio $',
+        data.result.description,
+        0
+      );
+    }
+  }
+  private async chart2() {
+    const title = 'Buscar Producto';
+    const subTitle = 'Selecciona uno';
+    const items = this.products;
+    const modal = await this.presentModal(items, title, subTitle);
+    modal.present();
+    const { data } = await modal.onDidDismiss();
+    if (data && data.result) {
+      const { monthsName, months } = this.getTimeByTickets(this.tickets);
+      const dataY = this.getProductByTime(
+        months,
+        data.result.skuId,
+        this.tickets,
+        'quantity'
+      );
+      this.setValuesChart(
+        monthsName,
+        dataY,
+        'Cantidad',
+        data.result.unity,
+        data.result.skuDisplayNameText,
+        1
+      );
+    }
+  }
+  private async chart3() {
+    const title = 'Buscar Producto';
+    const subTitle = 'Selecciona uno';
+    const items = this.products;
+    const modal = await this.presentModal(items, title, subTitle);
+    modal.present();
+    const { data } = await modal.onDidDismiss();
+    if (data && data.result) {
+      const { monthsName, months } = this.getTimeByTickets(this.tickets);
+      const dataY = this.getAvrByTime(
+        months,
+        data.result.skuId,
+        this.tickets,
+        'valueUnited'
+      );
+      this.setValuesChart(
+        monthsName,
+        dataY,
+        'Costo Unitario',
+        'Precio $',
+        data.result.skuDisplayNameText,
+        2
+      );
     }
   }
   // separa tickets por fechas
@@ -136,30 +248,57 @@ export class Tab1Component implements OnInit {
     });
     return { monthsName, months };
   }
-  // separa productos por fecha y por prop
+  // suma el prop del producto y lo separa en fecha
   getProductByTime(months: number[], skuId: string, tickets: ITicket[], prop) {
     const products: number[] = [];
     const getSum = (total: number, num: number) => {
       return +total + +num;
     };
-    console.log(this.products.filter(p => p.skuId === skuId));
+    for (const month of months) {
+      const p = tickets
+        .filter(t => new Date(t.date).getMonth() === month)
+        .map(p1 => p1.products);
+      const merged: IProduct[] = [].concat(...p);
+      console.log(merged.filter(m => m.skuId === skuId));
+      const filter = merged.filter(m => m.skuId === skuId).map(p2 => +p2[prop]);
+      products.push(filter.reduce(getSum));
+    }
+    return products;
+  }
+  // promedio de el prop del producto y lo separa en fecha
+  getAvrByTime(months: number[], skuId: string, tickets: ITicket[], prop) {
+    const products: number[] = [];
+    const getSum = (total: number, num: number) => {
+      return +total + +num;
+    };
     for (const month of months) {
       const p = tickets
         .filter(t => new Date(t.date).getMonth() === month)
         .map(p1 => p1.products);
       const merged: IProduct[] = [].concat(...p);
       const filter = merged.filter(m => m.skuId === skuId).map(p2 => +p2[prop]);
-      products.push(filter.reduce(getSum));
+      products.push(filter.reduce(getSum) / filter.length);
     }
     return products;
   }
+
   // crea graficas
+  /**
+   *
+   * @param labelsX valores en x
+   * @param arrNum datos de y
+   * @param titleChart Titulo h2
+   * @param label Titulo dentro de chart
+   * @param nameOfProduct Nombre del producto
+   * @param number numero de grafica a cambiar, undefined si es nueva
+   */
   setValuesChart(
     labelsX: string[],
     arrNum: number[],
     titleChart: string,
     label: string,
-    number?: number,
+    nameOfProduct: string,
+    number?: number
   ) {
     this.showChart = true;
     if (number >= 0) {
@@ -167,25 +306,65 @@ export class Tab1Component implements OnInit {
         lineChartData: [
           {
             data: arrNum,
-            label: label,
-          },
+            label: label
+          }
         ],
         lineChartLabels: labelsX,
         showChart: true,
         title: titleChart,
+        subTitle: nameOfProduct
       };
     } else {
       this.charts.push({
         lineChartData: [
           {
             data: arrNum,
-            label: label,
-          },
+            label: label
+          }
         ],
         lineChartLabels: labelsX,
         showChart: true,
         title: titleChart,
+        subTitle: nameOfProduct
       });
     }
+  }
+  // _helpers
+  // suma de productos por Sku y prop
+  private async getSumBySku(prop: string, skeId: string) {
+    const getSum = (total: number, num: number) => {
+      return +total + +num;
+    };
+    const tickets = await this.ticketService.getAll();
+    const p = tickets.map(p1 => p1.products);
+    const merged: IProduct[] = [].concat(...p);
+    console.log(
+      merged
+        .filter(m => m.skuId === skeId)
+        .map(pr => +pr[prop])
+        .reduce(getSum)
+    );
+  }
+  private sortsByProp(prop: string, isMayor = true): IProduct[] {
+    const compare = (a: IProduct, b: IProduct) => {
+      if (isMayor) {
+        if (+a[prop] > +b[prop]) {
+          return -1;
+        }
+        if (+a[prop] < +b[prop]) {
+          return 1;
+        }
+        return 0;
+      } else {
+        if (+a[prop] < +b[prop]) {
+          return -1;
+        }
+        if (+a[prop] > +b[prop]) {
+          return 1;
+        }
+        return 0;
+      }
+    };
+    return this.products.sort(compare);
   }
 }
