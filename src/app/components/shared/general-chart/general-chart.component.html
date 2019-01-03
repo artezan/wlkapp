@@ -1,3 +1,43 @@
+<div *ngIf="showOptions">
+  <div class="flex-input">
+    <ion-item>
+      <ion-label position="floating">Elementos a mostrar</ion-label>
+      <ion-input type="number"
+                 matInput
+                 (keyup)="filterByTop()"
+                 [(ngModel)]="numSort"></ion-input>
+    </ion-item>
+  </div>
+  <div class="flex-input">
+    <ion-item>
+      <ion-label>Mostrar</ion-label>
+      <ion-select [(ngModel)]="typeSort"
+                  (ionChange)="filterByTop()">
+        <ion-select-option value="top">Mayores</ion-select-option>
+        <ion-select-option value="bottom">Menores</ion-select-option>
+        <ion-select-option value="all">Todos</ion-select-option>
+      </ion-select>
+    </ion-item>
+  </div>
+
+  <div class="flex-input">
+    <ion-item>
+      <ion-label>Tipo</ion-label>
+      <ion-select [(ngModel)]="lineChartType"
+                  (ionChange)="changeChart()">
+        <ion-select-option value="line">Linea</ion-select-option>
+        <ion-select-option value="bar">Barras</ion-select-option>
+        <ion-select-option value="doughnut">Dona</ion-select-option>
+        <ion-select-option value="pie">Pastel</ion-select-option>
+        <ion-select-option value="horizontalBar">horizontalBar</ion-select-option>
+      </ion-select>
+    </ion-item>
+  </div>
+  <div class="flex-input">
+    <ion-label>Etiquetas</ion-label>
+    <ion-toggle [(ngModel)]="lineChartLegend">Etiquetas</ion-toggle>
+  </div>
+</div>
 <div class="m5-chart">
   <canvas baseChart
           [datasets]="lineChartData"

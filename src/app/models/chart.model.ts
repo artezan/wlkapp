@@ -7,4 +7,8 @@ export interface IChart {
   title: string;
   subTitle?: string;
   showChart: boolean;
+  type?: ChartType;
+  color?: any;
+  showOptions?: boolean;
 }
+export type ChartType = 'line' | 'bar' | 'doughnut' | 'pie' | 'horizontalBar';

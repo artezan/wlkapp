@@ -22,10 +22,21 @@
     <ion-list>
       <ion-item *ngFor="let item of items"
                 (click)="dismiss(item)">
-        {{ item.skuDisplayNameText }}
+        {{ item[prop] }}
       </ion-item>
     </ion-list>
   </span>
+  <span *ngIf="type === 'checkbox'">
+    <ion-list>
+      <ion-item *ngFor="let entry of items; let i = index">
+        <ion-label>{{ entry[prop] }}</ion-label>
+        <ion-checkbox (ionChange)="setArr($event.detail.checked, entry)"
+                      slot="end"></ion-checkbox>
+      </ion-item>
+    </ion-list>
+    <ion-button color="primary"
+                (click)="dismiss(arrSelect)">Finalizar</ion-button>
+  </span>
   <ion-button color="secondary"
-              (click)="modalController.dismiss()">Regresar</ion-button>
+              (click)="modalController.dismiss()">Cancelar</ion-button>
 </ion-content>
