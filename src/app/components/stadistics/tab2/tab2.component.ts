@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, HostListener, ElementRef } from '@angular/core';
 import { IChart, ChartType } from 'src/app/models/chart.model';
 import { IProduct } from 'src/app/models/product.model';
 import { ITicket } from 'src/app/models/ticket.model';
@@ -13,6 +13,12 @@ import { FormatDatesFront, ColorsChartGeneral } from 'src/app/_config/_helpers';
   styleUrls: ['./tab2.component.scss'],
 })
 export class Tab2Component implements OnInit {
+  // Immutable object, only modify with setState
+  state = {
+    visible: false,
+    loaded: false,
+  };
+  //
   showChart = false;
   charts: IChart[] = [];
   progress: any[] = [];
@@ -45,7 +51,6 @@ export class Tab2Component implements OnInit {
     const res = await this.ticketService.getAll();
     this.tickets = this.sortsByPropDate(res, 'date', false);
     this.ticketSelect = this.tickets;
-    console.log('this.tickets', this.tickets);
     this.chart1(this.tickets);
     this.chart2(this.tickets);
     this.chart3(this.tickets[this.tickets.length - 1]);
@@ -61,7 +66,6 @@ export class Tab2Component implements OnInit {
     const dataX: string[] = ticketsToShow.map(t => {
       return FormatDatesFront(new Date(t.date));
     });
-    console.log(dataX);
     const dataY: number[] = ticketsToShow.map(t => +t.realPrice);
     this.setValuesChart(
       dataX,
@@ -85,7 +89,6 @@ export class Tab2Component implements OnInit {
     const dataX: string[] = ticketsToShow.map(t => {
       return FormatDatesFront(new Date(t.date));
     });
-    console.log(dataX);
     const dataY: number[] = ticketsToShow.map(t => +t.discount);
     this.setValuesChart(
       dataX,
@@ -170,9 +173,7 @@ export class Tab2Component implements OnInit {
 
     const date1 = FormatDatesFront(new Date(ticketsToShow[0].date));
     const date2 = FormatDatesFront(new Date(ticketsToShow[1].date));
-    console.log(products1);
-    console.log(products2);
-    console.log(max);
+
     this.setValuesChartDouble(
       dataX,
       dataY1,
@@ -212,7 +213,6 @@ export class Tab2Component implements OnInit {
       modal.present();
       const { data } = await modal.onDidDismiss();
       if (data && data.result) {
-        console.log(data.result);
         this.chart2(data.result, 1);
       }
     }
@@ -231,7 +231,6 @@ export class Tab2Component implements OnInit {
       }
     }
     if (num === 3) {
-      console.log(this.tickets);
       const modal = await this.presentModal(
         this.tickets,
         'Selecciona Ticket',
@@ -421,5 +420,14 @@ export class Tab2Component implements OnInit {
       });
       this.progress[this.charts.length - 1] = { max: max };
     }
+    this.state.visible = true;
+  }
+  logScrolling(e?) {
+    const domEvent = new CustomEvent('is-scroll');
+    document.dispatchEvent(domEvent);
+  }
+  directiveOut(event) {
+    const { el, val } = event;
+    const progress = (el.nativeElement.childNodes[2].value = val);
   }
 }

@@ -2,11 +2,9 @@ ul {
     list-style-type: none;
 }
 
-
-.progress-bar {}
+// .progress-bar {}
 
 progress {
-
     /* Important Thing */
     -webkit-appearance: none;
     border: none;
@@ -14,22 +12,79 @@ progress {
 
 /* All good till now. Now we'll style the background */
 progress::-webkit-progress-bar {
-    background: black;
-    border-radius: 50px;
-    padding: 2px;
+    background: #989aa2;
+    border-radius: 2px;
+    padding: 0px;
     box-shadow: 0 1px 0px 0 rgba(255, 255, 255, 0.2);
 }
 
+
+
 /* Now the value part */
 progress::-webkit-progress-value {
-    border-radius: 50px;
+    border-radius: 2px;
     box-shadow: inset 0 1px 1px 0 rgba(255, 255, 255, 0.4);
-    background:
-        -webkit-linear-gradient(45deg, transparent, transparent 33%, rgba(0, 0, 0, 0.1) 33%, rgba(0, 0, 0, 0.1) 66%, transparent 66%),
-        -webkit-linear-gradient(top, rgba(255, 255, 255, 0.25), rgba(0, 0, 0, 0.2)),
-        -webkit-linear-gradient(left, #ba7448, #c4672d);
+    background: var(--ion-color-primary);
+    transition: width 1s;
 
-    /* Looks great, now animating it */
-    background-size: 25px 14px, 100% 100%, 100% 100%;
-    -webkit-animation: move 5s linear 0 infinite;
+}
+
+@keyframes progress {
+    from {
+        width: 0;
+    }
+
+    to {
+        width: 55%;
+    }
+}
+
+@-webkit-keyframes progress {
+    from {
+        width: 0;
+    }
+
+    to {
+        width: 55%;
+    }
+}
+
+@keyframes progress-2 {
+    from {
+        width: 0;
+    }
+
+    to {
+        width: 70%;
+    }
+}
+
+@-webkit-keyframes progress-2 {
+    from {
+        width: 0;
+    }
+
+    to {
+        width: 70%;
+    }
+}
+
+@keyframes progress-3 {
+    from {
+        width: 0;
+    }
+
+    to {
+        width: 90%;
+    }
+}
+
+@-webkit-keyframes progress-3 {
+    from {
+        width: 0;
+    }
+
+    to {
+        width: 90%;
+    }
 }

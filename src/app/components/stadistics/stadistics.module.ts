@@ -11,6 +11,7 @@ import { Tab2Component } from './tab2/tab2.component';
 import { Tab3Component } from './tab3/tab3.component';
 import { SharedModule } from '../shared/shared.module';
 import { ModalComponent } from '../shared/modal/modal.component';
+import { DirectivesModule } from '../directives/directives.module';
 
 const routes: Routes = [
   {
@@ -57,6 +58,7 @@ const routes: Routes = [
     FormsModule,
     IonicModule,
     SharedModule,
+    DirectivesModule,
     RouterModule.forChild(routes),
   ],
   declarations: [StadisticsPage, Tab1Component, Tab2Component, Tab3Component],

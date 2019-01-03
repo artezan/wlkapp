@@ -7,11 +7,14 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content padding>
+<ion-content padding
+             [scrollEvents]="true"
+             (ionScroll)="logScrolling($event)">
   <ion-grid fixed>
     <!-- <button (click)="setChart(3)">Modal</button> -->
     <ng-container *ngIf="showChart; else elseTemplate">
-      <div *ngFor="let chart of charts; let i = index">
+      <div *ngFor="let chart of charts; let i = index"
+           id="algo">
         <h4>{{ chart.title }}</h4>
         <ion-card>
           <ion-item lines="none">
@@ -25,7 +28,7 @@
                              [lineChartColors]="chart.color"
                              [showOptions]="chart.showOptions"></app-general-chart>
         </ion-card>
-        <div *ngIf="chart.type === 'horizontalBar'">
+        <!-- <div *ngIf="chart.type === 'horizontalBar'">
           <select [(ngModel)]="typeMetric"
                   (change)="chart4(ticketSelect, i, typeMetric)">
             <option value="importPrice"> Importe </option>
@@ -42,6 +45,43 @@
                   {{ chartHor.data[ii] ? chartHor.data[ii]
                   : 0 }}
                   <progress [value]="chartHor.data[ii] ? chartHor.data[ii] : 0"
+                            [max]="progress[i].max"></progress>
+                </li>
+              </ul>
+            </li>
+          </ul>
+        </div> -->
+        <div *ngIf="chart.type === 'horizontalBar'">
+          <select [(ngModel)]="typeMetric"
+                  (change)="chart4(ticketSelect, i, typeMetric); logScrolling()">
+            <option value="importPrice"> Importe </option>
+            <option value="basePrice"> Precio Base </option>
+          </select>
+          <h5>Resumen</h5>
+          <ul>
+            <li *ngFor="
+                let label of chart.lineChartLabels;
+                let ii = index;
+                last as isLast
+              "
+                id="li-{{ ii }}">
+              {{ label }}
+              <ul>
+                <li appDirectives
+                    [value]="chartHor.data[ii] ? chartHor.data[ii] : 0"
+                    (isVisible)="directiveOut($event)"
+                    class="progress-bar"
+                    *ngFor="let chartHor of chart.lineChartData">
+                  {{ chartHor.label }}
+
+                  <ion-chip outline
+                            color="primary">
+                    <ion-label> ${{
+                      chartHor.data[ii] ?
+                      chartHor.data[ii]
+                      : 0 }}</ion-label>
+                  </ion-chip>
+                  <progress value="0"
                             [max]="progress[i].max"></progress>
                 </li>
               </ul>
