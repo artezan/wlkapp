@@ -34,8 +34,8 @@ export class Tab3Component implements OnInit {
 
   ngOnInit() {
     const currentDate = new Date().getMonth();
-    this.selectMont = 11;
-    this.init(11);
+    this.selectMont = currentDate;
+    this.init(currentDate);
   }
 
   async init(month: number) {
