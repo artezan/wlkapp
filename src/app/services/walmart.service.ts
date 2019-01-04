@@ -8,15 +8,20 @@ import { SubCategory, ISubcategory } from '../models/subCategory.model';
 // tslint:disable-next-line:comment-format
 // tslint:disable:max-line-length
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class WalmartService {
   public subcategories: ISubcategory[];
   constructor(private http: HttpClient) {}
+  getStores(zipCode: string, colony: string): Observable<any> {
+    return this.http.get(
+      `https://super.walmart.com.mx/api/rest/model/atg/userprofiling/ProfileActor/getStoreNameDetails?zipcode=${zipCode}&colony=${colony}`,
+    );
+  }
 
   getSKU(upc, skuId, storeId): Observable<IProduct> {
     return this.http.get<any>(
-      API_WALMART.GET_DET_SKU + `storeId=${storeId}&upc=${upc}&skuId=${skuId}`
+      API_WALMART.GET_DET_SKU + `storeId=${storeId}&upc=${upc}&skuId=${skuId}`,
     );
   }
   getCategories(): Observable<ICategory> {
@@ -24,7 +29,7 @@ export class WalmartService {
   }
   getDepartment(url: string, storeId = '0000009999'): Observable<ICategory> {
     return this.http.get<any>(
-      `https://super.walmart.com.mx/api/wmx/department${url}?storeId=${storeId}&eSegments=desktop|anonymous|`
+      `https://super.walmart.com.mx/api/wmx/department${url}?storeId=${storeId}&eSegments=desktop|anonymous|`,
     );
   }
   /**
@@ -33,7 +38,7 @@ export class WalmartService {
   getFamily(url: string): Observable<SubCategory> {
     return this.http.get<any>(
       // tslint:disable-next-line:max-line-length
-      `https://super.walmart.com.mx/api/wmx/family${url}&eSegments=mobile|anonymous|`
+      `https://super.walmart.com.mx/api/wmx/family${url}&eSegments=mobile|anonymous|`,
       // tslint:disable-next-line:max-line-length
       // 'https://super.walmart.com.mx/api/wmx/family/despensa/caf%C3%A9-t%C3%A9-y-sustitutos/_/N-1e0ffze?categoryType=department&categoryId=cat120070&storeId=0000009999&eSegments=mobile|anonymous|'
     );
@@ -44,11 +49,11 @@ export class WalmartService {
    */
   getBrowse(
     // tslint:disable-next-line:max-line-length
-    navigationState: string = '/despensa/café-té-y-sustitutos/té-de-hierbas-y-especias/_/N-pmj2uf?categoryId=cat120070&categoryType=department&eSegments=mobile%7Canonymous%7C&storeId=0000009999'
+    navigationState: string = '/despensa/café-té-y-sustitutos/té-de-hierbas-y-especias/_/N-pmj2uf?categoryId=cat120070&categoryType=department&eSegments=mobile%7Canonymous%7C&storeId=0000009999',
   ) {
     const numStart = navigationState.indexOf(
       '/',
-      navigationState.indexOf('/') + 1
+      navigationState.indexOf('/') + 1,
     );
     const url = navigationState.substring(numStart);
     console.log(url);

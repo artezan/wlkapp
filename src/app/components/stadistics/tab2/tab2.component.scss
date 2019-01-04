@@ -2,6 +2,24 @@ ul {
     list-style-type: none;
 }
 
+.label-flex {
+    width: 100%;
+    display: flex;
+
+}
+
+
+
+.border-label {
+    padding: 5px;
+    border: 2px solid;
+    width: 40%;
+    border-color: var(--ion-color-primary) !important;
+    color: var(--ion-color-primary);
+    margin-top: 10px;
+    text-align: center
+}
+
 // .progress-bar {}
 
 progress {
@@ -18,15 +36,12 @@ progress::-webkit-progress-bar {
     box-shadow: 0 1px 0px 0 rgba(255, 255, 255, 0.2);
 }
 
-
-
 /* Now the value part */
 progress::-webkit-progress-value {
     border-radius: 2px;
     box-shadow: inset 0 1px 1px 0 rgba(255, 255, 255, 0.4);
     background: var(--ion-color-primary);
     transition: width 1s;
-
 }
 
 @keyframes progress {

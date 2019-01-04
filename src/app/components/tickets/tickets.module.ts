@@ -9,6 +9,7 @@ import { TicketsPage } from './tickets.page';
 
 import { TicketsDetailComponent } from './tickets-detail/tickets-detail.component';
 import { SharedModule } from '../shared/shared.module';
+import { ModalComponent } from '../shared/modal/modal.component';
 
 const routes: Routes = [
   {
@@ -22,6 +23,8 @@ const routes: Routes = [
 ];
 
 @NgModule({
+  entryComponents: [ModalComponent],
+
   imports: [
     CommonModule,
     FormsModule,

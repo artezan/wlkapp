@@ -3,13 +3,72 @@
     <ion-buttons slot="start">
       <ion-menu-button></ion-menu-button>
     </ion-buttons>
-    <ion-title>Tab3</ion-title>
+    <ion-title>Resumen del Mes</ion-title>
   </ion-toolbar>
 </ion-header>
 
-<ion-content padding>
-  <p>
-    tab3 works!
-  </p>
+<ion-content fullscreen="true"
+             padding>
+  <ion-grid fixed>
+    <ng-container *ngIf="isLoad; then thenTemplate; else elseTemplate"></ng-container>
+    <ng-template #thenTemplate>
+      <label>Mes</label>
+      <p>
 
+        <select [(ngModel)]="selectMont"
+                (change)="changeMonth(selectMont)">
+          <option *ngFor="let month of months; let i = index"
+                  [value]="i">{{
+            month
+            }}</option>
+        </select>
+      </p>
+      <h4>Número de Tickets {{numOftickets}}</h4>
+      <ng-container *ngIf="products.length; else elseTemplate">
+      </ng-container>
+      <ion-list lines="full">
+        <ion-item lines="full"
+                  *ngFor="let product of products">
+          <ion-thumbnail slot="start">
+            <ion-img *ngIf="product.imgURL !== null"
+                     [src]="product.imgURL"></ion-img>
+          </ion-thumbnail>
+          <ion-label>
+            <p>{{ product.skuDisplayNameText }}</p>
+          </ion-label>
+
+          <ion-chip outline
+                    slot="end"
+                    color="primary">
+            <ion-label> ${{ product.importPrice }}</ion-label>
+          </ion-chip>
+        </ion-item>
+      </ion-list>
+      <ion-item-divider color="light"
+                        sticky="true">
+        <ion-label> Descuento Total de Mes </ion-label>
+        <ion-chip style="border-radius: 4px;"
+                  outline
+                  slot="end"
+                  color="dark">
+          <ion-label> ${{ totalDiscont }}</ion-label>
+        </ion-chip>
+      </ion-item-divider>
+      <ion-item-divider color="dark"
+                        sticky="true">
+        <ion-label> Importe Total de Mes </ion-label>
+        <ion-chip style="border-radius: 4px;"
+                  outline
+                  slot="end"
+                  color="light">
+          <ion-label> ${{ totalImport }}</ion-label>
+        </ion-chip>
+      </ion-item-divider>
+
+      <ng-template #elseTemplate>
+        No hay tickets registrados en este mes
+      </ng-template>
+    </ng-template>
+    <ng-template #elseTemplate> cargando ... </ng-template>
+  </ion-grid>
 </ion-content>

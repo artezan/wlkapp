@@ -46,8 +46,9 @@ export class GeneralChartComponent implements OnInit, OnChanges {
   @Input() lineChartLegend = true;
   @Input() lineChartType: 'line' | 'bar' | 'doughnut' | 'pie' = 'line';
   @Input()
-  lineChartOptions: any = {
+  lineChartOptions: any; /* = {
     borderCapStyle: 'round',
+    aspectRatio: 1,
     responsive: true,
     scales: {
       yAxes: [
@@ -58,7 +59,7 @@ export class GeneralChartComponent implements OnInit, OnChanges {
         },
       ],
     },
-  };
+  }; */
   realData;
   realLabel;
   isOneData: boolean;
@@ -105,23 +106,29 @@ export class GeneralChartComponent implements OnInit, OnChanges {
       this.lineChartLegend = false;
       this.lineChartOptions = {
         borderCapStyle: 'round',
+        aspectRatio: 1,
+
         responsive: true,
       };
     } else {
       this.lineChartLegend = true;
-      this.lineChartOptions = {
-        borderCapStyle: 'round',
-        responsive: true,
-        scales: {
-          yAxes: [
-            {
-              ticks: {
-                suggestedMin: 0,
+      if (this.lineChartOptions === undefined) {
+        this.lineChartOptions = {
+          borderCapStyle: 'round',
+          aspectRatio: 1,
+
+          responsive: true,
+          scales: {
+            yAxes: [
+              {
+                ticks: {
+                  suggestedMin: 0,
+                },
               },
-            },
-          ],
-        },
-      };
+            ],
+          },
+        };
+      }
     }
   }
 

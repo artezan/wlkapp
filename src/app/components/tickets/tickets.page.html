@@ -7,8 +7,10 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content padding>
+<ion-content fullscreen="true"
+             padding>
   <ion-grid fixed>
+    <button (click)="presentAlertPrompt()">Tienda</button>
     <ng-container *ngIf="isLoad; else elseTemplate">
       <ng-container *ngIf="allTickets.length > 0; else NoTicket">
         <ion-list>
@@ -26,7 +28,7 @@
             <ion-item detail
                       (click)="goToDetails(ticket)">
               <ion-icon slot="start"
-                        name="home"> </ion-icon>
+                        name="list-box"> </ion-icon>
               <ion-label>
                 <h2>{{ ticket.date }}</h2>
                 <h3>${{ ticket.realPrice }}</h3>

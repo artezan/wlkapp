@@ -266,7 +266,6 @@ export class Tab1Component implements OnInit {
         .filter(t => new Date(t.date).getMonth() === month)
         .map(p1 => p1.products);
       const merged: IProduct[] = [].concat(...p);
-      console.log(merged.filter(m => m.skuId === skuId));
       const filter = merged.filter(m => m.skuId === skuId).map(p2 => +p2[prop]);
       products.push(+filter.reduce(getSum).toFixed(2));
     }
@@ -280,11 +279,15 @@ export class Tab1Component implements OnInit {
     };
     for (const month of months) {
       const p = tickets
-        .filter(t => new Date(t.date).getMonth() === month)
+        .filter(t => new Date(t.date).getMonth() === +month)
         .map(p1 => p1.products);
       const merged: IProduct[] = [].concat(...p);
       const filter = merged.filter(m => m.skuId === skuId).map(p2 => +p2[prop]);
-      products.push(+(filter.reduce(getSum) / filter.length).toFixed(2));
+      if (filter.length === 0) {
+        products.push(0);
+      } else {
+        products.push(+(filter.reduce(getSum) / filter.length).toFixed(2));
+      }
     }
     return products;
   }
@@ -345,12 +348,6 @@ export class Tab1Component implements OnInit {
     const tickets = await this.ticketService.getAll();
     const p = tickets.map(p1 => p1.products);
     const merged: IProduct[] = [].concat(...p);
-    console.log(
-      merged
-        .filter(m => m.skuId === skeId)
-        .map(pr => +pr[prop])
-        .reduce(getSum),
-    );
   }
   private sortsByProp(prop: string, isMayor = true): IProduct[] {
     const compare = (a: IProduct, b: IProduct) => {

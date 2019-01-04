@@ -3,13 +3,19 @@ import { FbTicketsService } from 'src/app/services/fb-tickets.service';
 import { ITicket } from 'src/app/models/ticket.model';
 import { WalmartService } from 'src/app/services/walmart.service';
 import { IProduct } from 'src/app/models/product.model';
-import { LoadingController } from '@ionic/angular';
+import {
+  LoadingController,
+  AlertController,
+  ModalController,
+} from '@ionic/angular';
 import { Router, NavigationExtras } from '@angular/router';
+import { AlertInput } from '@ionic/core';
+import { ModalComponent } from '../shared/modal/modal.component';
 
 @Component({
   selector: 'app-tickets',
   templateUrl: './tickets.page.html',
-  styleUrls: ['./tickets.page.scss']
+  styleUrls: ['./tickets.page.scss'],
 })
 export class TicketsPage implements OnInit {
   ticketInput: ITicket;
@@ -20,7 +26,9 @@ export class TicketsPage implements OnInit {
     public ticketService: FbTicketsService,
     private walmartService: WalmartService,
     public loadingController: LoadingController,
-    private router: Router
+    private router: Router,
+    public alertController: AlertController,
+    public modalController: ModalController,
   ) {}
 
   ngOnInit() {
@@ -69,7 +77,7 @@ export class TicketsPage implements OnInit {
       prePrice: firstElement.attributes.SubTotal,
       discount: firstElement.attributes.Descuento
         ? firstElement.attributes.Descuento
-        : 0
+        : 0,
     };
     this.ticketInput.products = await this.getProducts(productsOnXml);
     this.addTicketToFB();
@@ -102,7 +110,7 @@ export class TicketsPage implements OnInit {
             keyUnity: p.ClaveUnidad,
             description: p.Descripcion,
             unity: p.Unidad,
-            valueUnited: p.ValorUnitario
+            valueUnited: p.ValorUnitario,
           });
         } else {
           product.push({
@@ -123,7 +131,7 @@ export class TicketsPage implements OnInit {
             keyUnity: p.ClaveUnidad,
             description: p.Descripcion,
             unity: p.Unidad,
-            valueUnited: p.ValorUnitario
+            valueUnited: p.ValorUnitario,
           });
         }
       }
@@ -157,7 +165,7 @@ export class TicketsPage implements OnInit {
   }
   async presentLoading() {
     const loading = await this.loadingController.create({
-      message: 'Subiendo...'
+      message: 'Subiendo...',
     });
     return await loading;
   }
@@ -168,5 +176,87 @@ export class TicketsPage implements OnInit {
     } else {
       this.router.navigate(['tickets/details']);
     }
+  }
+  setStoreId(zipCode, colony) {
+    this.walmartService.getStores(zipCode, colony).subscribe(data => {
+      console.log(data);
+    });
+  }
+  async presentAlertPrompt() {
+    const propInput: AlertInput[] = [
+      {
+        name: 'colony',
+        type: 'text',
+        label: 'Colonia',
+        placeholder: 'Colonia',
+      },
+      {
+        name: 'zip',
+        type: 'text',
+        placeholder: 'CP',
+      },
+    ];
+    const alert = await this.alertController.create({
+      header: 'Tienda',
+      subHeader: 'Llene los campos',
+      message: 'Se buscara la tienda',
+      inputs: propInput,
+      buttons: [
+        {
+          text: 'Cancelar',
+          role: 'cancel',
+          cssClass: 'secondary',
+          handler: () => {
+            console.log('');
+          },
+        },
+        {
+          text: 'Aceptar',
+          role: 'ok',
+          handler: () => {
+            console.log('');
+          },
+        },
+      ],
+    });
+
+    await alert.present();
+    await alert.onWillDismiss().then(res => {
+      if (res.role === 'ok') {
+        this.setStoreId(res.data.values.zip, res.data.values.colony);
+      }
+    });
+  }
+  async setModal() {
+    const modal = await this.presentModal(
+      ['this.tickets'],
+      'Selecciona Ticket',
+      'Selecciona Dos',
+      'date',
+      'checkbox',
+    );
+    modal.present();
+    const { data } = await modal.onDidDismiss();
+    if (data && data.result) {
+      // acciones
+    }
+  }
+
+  private async presentModal(items: any[], title, subTitle, prop, type) {
+    const modal = await this.modalController.create({
+      component: ModalComponent,
+      componentProps: {
+        type,
+        items,
+        title,
+        isSearch: true,
+        subTitle,
+        prop,
+      },
+      backdropDismiss: true,
+      showBackdrop: true,
+    });
+
+    return await modal;
   }
 }

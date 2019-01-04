@@ -20,7 +20,7 @@ export class Tab2Component implements OnInit {
   };
   //
   showChart = false;
-  charts: IChart[] = [];
+  charts: any[] = [];
   progress: any[] = [];
   products: IProduct[];
   tickets: ITicket[] = [];
@@ -58,8 +58,8 @@ export class Tab2Component implements OnInit {
   }
   chart1(tickets: ITicket[], num?: number) {
     let ticketsToShow: ITicket[];
-    if (tickets.length > 10) {
-      ticketsToShow = tickets.slice(tickets.length - 10, tickets.length);
+    if (tickets.length > 5) {
+      ticketsToShow = tickets.slice(tickets.length - 5, tickets.length);
     } else {
       ticketsToShow = tickets;
     }
@@ -75,7 +75,7 @@ export class Tab2Component implements OnInit {
       '',
       ColorsChartGeneral,
       num,
-      'bar',
+      'horizontalBar',
       false,
     );
   }
@@ -98,7 +98,7 @@ export class Tab2Component implements OnInit {
       '',
       ColorsChartGeneral,
       num,
-      'line',
+      'horizontalBar',
       false,
     );
   }
@@ -304,7 +304,7 @@ export class Tab2Component implements OnInit {
         showOptions,
       };
     } else {
-      this.charts.push({
+      this.charts.push(<any>{
         lineChartData: [
           {
             data: arrNum,
@@ -403,10 +403,25 @@ export class Tab2Component implements OnInit {
         type: 'horizontalBar',
         color: undefined,
         showOptions,
+        showSumary: true,
+        lineChartOptions: {
+          borderCapStyle: 'round',
+          aspectRatio: 0.5,
+          responsive: true,
+          scales: {
+            yAxes: [
+              {
+                ticks: {
+                  suggestedMin: 0,
+                },
+              },
+            ],
+          },
+        },
       };
       this.progress[number] = { max: max };
     } else {
-      this.charts.push({
+      this.charts.push(<any>{
         lineChartData: [
           {
             data: arrNum,
@@ -417,6 +432,21 @@ export class Tab2Component implements OnInit {
         showChart,
         title: titleChart,
         showOptions,
+        showSumary: true,
+        lineChartOptions: {
+          borderCapStyle: 'round',
+          aspectRatio: 0.5,
+          responsive: true,
+          scales: {
+            yAxes: [
+              {
+                ticks: {
+                  suggestedMin: 0,
+                },
+              },
+            ],
+          },
+        },
       });
       this.progress[this.charts.length - 1] = { max: max };
     }
