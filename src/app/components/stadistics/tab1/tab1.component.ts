@@ -9,7 +9,7 @@ import { ITicket } from 'src/app/models/ticket.model';
 @Component({
   selector: 'app-tab1',
   templateUrl: './tab1.component.html',
-  styleUrls: ['./tab1.component.scss'],
+  styleUrls: ['./tab1.component.scss']
 })
 export class Tab1Component implements OnInit {
   showChart = false;
@@ -28,11 +28,11 @@ export class Tab1Component implements OnInit {
     'Septiembre',
     'Octubre',
     'Noviembre',
-    'Diciembre',
+    'Diciembre'
   ];
   constructor(
     public ticketService: FbTicketsService,
-    public modalController: ModalController,
+    public modalController: ModalController
   ) {}
 
   ngOnInit() {
@@ -80,14 +80,14 @@ export class Tab1Component implements OnInit {
       months,
       skuIdOfMayor,
       this.tickets,
-      'importPrice',
+      'importPrice'
     );
     this.setValuesChart(
       monthsName,
       dataY,
       'Importe',
       'Precio $',
-      productOfImport.skuDisplayNameText,
+      productOfImport.skuDisplayNameText
     );
     // cantidad
     const productOfQuantity = this.sortsByProp('quantity')[0];
@@ -95,14 +95,14 @@ export class Tab1Component implements OnInit {
       months,
       productOfQuantity.skuId,
       this.tickets,
-      'quantity',
+      'quantity'
     );
     this.setValuesChart(
       monthsName,
       dataY2,
       'Cantidad',
       productOfQuantity.unity,
-      productOfQuantity.skuDisplayNameText,
+      productOfQuantity.skuDisplayNameText
     );
     // Costo Unitario
     const productOfCost = this.sortsByProp('valueUnited')[0];
@@ -110,14 +110,14 @@ export class Tab1Component implements OnInit {
       months,
       productOfCost.skuId,
       this.tickets,
-      'valueUnited',
+      'valueUnited'
     );
     this.setValuesChart(
       monthsName,
       dataY3,
       'Costo Unitario',
       'Precio $',
-      productOfCost.skuDisplayNameText,
+      productOfCost.skuDisplayNameText
     );
     // Importe - Ticket
   }
@@ -147,10 +147,10 @@ export class Tab1Component implements OnInit {
         title,
         isSearch: true,
         subTitle,
-        prop: 'skuDisplayNameText',
+        prop: 'skuDisplayNameText'
       },
       backdropDismiss: true,
-      showBackdrop: true,
+      showBackdrop: true
     });
 
     return await modal;
@@ -179,7 +179,7 @@ export class Tab1Component implements OnInit {
         months,
         data.result.skuId,
         this.tickets,
-        'importPrice',
+        'importPrice'
       );
       this.setValuesChart(
         monthsName,
@@ -187,7 +187,7 @@ export class Tab1Component implements OnInit {
         'Importe',
         'Precio $',
         data.result.description,
-        0,
+        0
       );
     }
   }
@@ -204,7 +204,7 @@ export class Tab1Component implements OnInit {
         months,
         data.result.skuId,
         this.tickets,
-        'quantity',
+        'quantity'
       );
       this.setValuesChart(
         monthsName,
@@ -212,7 +212,7 @@ export class Tab1Component implements OnInit {
         'Cantidad',
         data.result.unity,
         data.result.skuDisplayNameText,
-        1,
+        1
       );
     }
   }
@@ -229,7 +229,7 @@ export class Tab1Component implements OnInit {
         months,
         data.result.skuId,
         this.tickets,
-        'valueUnited',
+        'valueUnited'
       );
       this.setValuesChart(
         monthsName,
@@ -237,7 +237,7 @@ export class Tab1Component implements OnInit {
         'Costo Unitario',
         'Precio $',
         data.result.skuDisplayNameText,
-        2,
+        2
       );
     }
   }
@@ -267,7 +267,11 @@ export class Tab1Component implements OnInit {
         .map(p1 => p1.products);
       const merged: IProduct[] = [].concat(...p);
       const filter = merged.filter(m => m.skuId === skuId).map(p2 => +p2[prop]);
-      products.push(+filter.reduce(getSum).toFixed(2));
+      if (filter.length === 0) {
+        products.push(0);
+      } else {
+        products.push(+filter.reduce(getSum).toFixed(2));
+      }
     }
     return products;
   }
@@ -308,7 +312,7 @@ export class Tab1Component implements OnInit {
     titleChart: string,
     label: string,
     nameOfProduct: string,
-    number?: number,
+    number?: number
   ) {
     this.showChart = true;
     if (number >= 0) {
@@ -316,26 +320,26 @@ export class Tab1Component implements OnInit {
         lineChartData: [
           {
             data: arrNum,
-            label: label,
-          },
+            label: label
+          }
         ],
         lineChartLabels: labelsX,
         showChart: true,
         title: titleChart,
-        subTitle: nameOfProduct,
+        subTitle: nameOfProduct
       };
     } else {
       this.charts.push({
         lineChartData: [
           {
             data: arrNum,
-            label: label,
-          },
+            label: label
+          }
         ],
         lineChartLabels: labelsX,
         showChart: true,
         title: titleChart,
-        subTitle: nameOfProduct,
+        subTitle: nameOfProduct
       });
     }
   }
